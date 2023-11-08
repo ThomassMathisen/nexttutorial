@@ -1,10 +1,17 @@
-import React from 'react'
-import styles from "./page.module.css"
+"use client";
 
-const Register = () => {
-  return (
-    <div className={styles.container}>Register</div>
-  )
-}
+import React, { useEffect, useState } from "react";
+import styles from "./page.module.css";
+import useSWR from "swr";
 
-export default Register
+const Dashboard = () => {
+  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  const { data, mutate, error, isLoading } = useSWR(
+    "https://jsonplaceholder.typicode.com/posts",
+    fetcher
+  );
+  return <div className={styles.container}></div>;
+};
+
+export default Dashboard;

@@ -1,19 +1,28 @@
 import React from "react";
 import styles from "./page.module.css";
 import Image from "next/image";
+import { notFound } from "next/navigation";
 
-const BlogPost = () => {
+async function getData(id) {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    return notFound();
+  }
+
+  return res.json();
+}
+
+const BlogPost = async ({ params }) => {
+  const data = await getData(params.id);
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         <div className={styles.info}>
-          <h1 className={styles.title}>Title</h1>
-          <p className={styles.desc}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque ad
-            laudantium aspernatur quam suscipit, enim aperiam sit voluptas eius
-            perspiciatis repellat nulla reiciendis. Magni eveniet nostrum
-            tenetur beatae incidunt atque.
-          </p>
+          <h1 className={styles.title}>{data.title}</h1>
+          <p className={styles.desc}>{data.desc}</p>
           <div className={styles.author}>
             <Image
               src="https://images.pexels.com/photos/14021938/pexels-photo-14021938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -35,22 +44,7 @@ const BlogPost = () => {
         </div>
       </div>
       <div className={styles.content}>
-        <p className={styles.text}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam in
-          commodi assumenda reprehenderit, dicta omnis. Dignissimos, facere
-          reiciendis qui sint asperiores obcaecati neque distinctio quibusdam
-          quos, fugiat, ad libero ipsam! Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Quibusdam in commodi assumenda reprehenderit, dicta
-          omnis. Dignissimos, facere reiciendis qui sint asperiores obcaecati
-          neque distinctio quibusdam quos, fugiat, ad libero ipsam! Lorem ipsum
-          dolor sit amet consectetur adipisicing elit. Quibusdam in commodi
-          assumenda reprehenderit, dicta omnis. Dignissimos, facere reiciendis
-          qui sint asperiores obcaecati neque distinctio quibusdam quos, fugiat,
-          ad libero ipsam! Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Quibusdam in commodi assumenda reprehenderit, dicta omnis.
-          Dignissimos, facere reiciendis qui sint asperiores obcaecati neque
-          distinctio quibusdam quos, fugiat, ad libero ipsam!
-        </p>
+        <p className={styles.text}>{data.content}</p>
       </div>
     </div>
   );
